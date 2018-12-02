@@ -61,12 +61,13 @@ fetchData() {
                         refreshing={this.state.refreshing}
                         onRefresh={this._onRefresh}/>
                 }>
-        <Table>
-            <Row data={['Nick', 'Wynik', 'Suma', 'Typ', 'Data']} style={styles.head} textStyle={styles.text}/>
+                <View style={styles.toolbar}><Text style={styles.textTab}>RESULTS</Text></View>
+        <Table style={styles.table} >
+            <Row data={['Nick', 'Wynik', 'Suma', 'Typ', 'Data']} style={styles.head} flexArr={[1, 0.8, 0.8, 1.5,1.5]} textStyle={styles.textTab}/>
               <ListView
                   dataSource = {clonedResults}
                   renderRow = {
-                  (rowData) => <Row data={[rowData.nick, rowData.score, rowData.total, rowData.type,rowData.date]}  textStyle={styles.text}/>
+                  (rowData) => <Row data={[rowData.nick, rowData.score, rowData.total, rowData.type,rowData.date]}  textStyle={styles.text} flexArr={[1, 0.8, 0.8, 1.5,1.5]}/>
               }>
           </ListView>
         </Table>
@@ -77,23 +78,35 @@ fetchData() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-      padding: 40,
+    flex: 1, paddingTop: 30, 
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
   },
+  table: {
+    width: '100%'
+  },
   instructions: {
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
   },
+  toolbar: {
+    flex: 1/2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    height: 50,
+  },
     Text: {
       padding: 40
     },
-    head: { height: 40, backgroundColor: '#f1f8ff' },
-    text: { margin: 6 }
+    head: { height: 40, backgroundColor: 'silver'},
+    text: { margin: 3 , textAlign: 'center'},
+    textTab: {
+      fontWeight: 'bold',
+      textAlign: 'center',
+    }
 });

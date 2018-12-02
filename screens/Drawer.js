@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 
@@ -24,10 +24,14 @@ export default class Drawer extends Component {
   render() {
     return (
       <View style={styles.container}>
-        
-        <Button title="Home Page" color='#008000' onPress={()=> this.newScreen('App')}></Button>
-        <Button title="Tests" color='#008000' onPress={()=> this.newScreen('Tests')}></Button>
-        <Button title="Results" color='#008000' onPress={()=> this.newScreen('Results')}></Button>
+        <Text style={styles.quiz}>Quiz App</Text>
+        <Image
+          style={styles.obrazek}
+          source={{uri: 'http://pluto.uploadfile.pl/pobierz/1570529---ospk/5316677400_1326980696.jpg'}}
+        />
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('App')}></TouchableOpacity>
+        <Button title="Tests" color='#1A539F' onPress={()=> this.newScreen('Tests')}></Button>
+        <Button title="Results" color='#1A539F' onPress={()=> this.newScreen('Results')}></Button>
       
       </View>
     );
@@ -37,9 +41,8 @@ export default class Drawer extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#AB67AB',
+    justifyContent: 'flex-start',
+    backgroundColor: '#4f6d7a',
   },
   welcome: {
     fontSize: 20,
@@ -51,4 +54,18 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  quiz: {
+    fontSize: 30,
+    fontFamily: 'OpenSans-Bold',
+    textAlign: 'center'
+  },
+  obrazek: {
+    width: 100, 
+    height: 100, 
+    justifyContent: 'center',
+    marginLeft: 100
+  },
+  button: {
+    color: 'red'
+  }
 });

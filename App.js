@@ -50,6 +50,7 @@ displayData  = async () => {
       <View style={styles.drw}>
           <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer('Drawer')}><Image source={require('./img/menu.svg.png')} /></TouchableOpacity>
       </View>
+      
         <Button title="Tests" color='#008000' onPress={()=> this.newScreen('Tests')}></Button>
         <Button title="Results" color='#008000' onPress={()=> this.newScreen('Results')}></Button>
         <Text style={styles.OpenSans}>Jakiś tekstg</Text>
@@ -93,4 +94,7 @@ const styles = StyleSheet.create({
     color: '#F5FCFF',
     marginBottom: 5,
   },
+  button: {
+
+  }
 });
