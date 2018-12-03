@@ -46,15 +46,18 @@ displayData  = async () => {
         backgroundColor="#4f6d7a"
         barStyle="light-content"
       />
-      <View style={styles.toolbar}><Text>QUIZ</Text></View>
+      <View style={styles.toolbar}><Text style={styles.textTab}>HOME PAGE</Text></View>
       <View style={styles.drw}>
           <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer('Drawer')}><Image source={require('./img/menu.svg.png')} /></TouchableOpacity>
       </View>
-      
-        <Button title="Tests" color='#008000' onPress={()=> this.newScreen('Tests')}></Button>
-        <Button title="Results" color='#008000' onPress={()=> this.newScreen('Results')}></Button>
-        <Text style={styles.OpenSans}>Jakiś tekstg</Text>
-        <Text>Jakiś tekstg</Text>
+
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Results')}>
+          <Text>Results</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
+          <Text>Tests</Text>
+        </TouchableOpacity>
+
             <Regulations pagekey={"uniquekey"} title={"Regulamin"} description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}/>
         </View>
     );
@@ -66,19 +69,19 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'center',
     //alignItems: 'center',
-    backgroundColor: '#4f6d7a'
+    backgroundColor: 'white'
   },
   toolbar: {
     flex: 1/10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#60A510',
   },
   drw: {
-    flex: 1/5,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
+    height: 50
   },
   welcome: {
     fontSize: 20,
@@ -95,6 +98,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-
+    marginLeft: 80,
+    height: 43, 
+    width: 200,
+    marginTop: 10,
+    alignItems: 'center',
+    backgroundColor: 'silver',
+    padding: 10,
+    borderWidth: 2
+  },
+  textTab: {
+    fontWeight: 'bold',
+    textAlign: 'center',
   }
 });

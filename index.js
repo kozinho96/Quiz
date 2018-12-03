@@ -17,6 +17,9 @@ Navigation.registerComponent('Regulations', () => Regulations);
 const { width } = Dimensions.get('window');
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({
+    layout: {
+      orientation: ['portrait']
+    },
     topBar: {
       elevation: 0,
       visible: true,
@@ -29,7 +32,7 @@ Navigation.events().registerAppLaunchedListener(() => {
       },
       background: {
         color: 'transparent'
-      }
+      }    
     }
   });
   Navigation.setRoot({

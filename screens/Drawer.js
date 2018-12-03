@@ -10,7 +10,7 @@ export default class Drawer extends Component {
     Navigation.mergeOptions('drawerId', {
       sideMenu: {
         left: {
-          visible: true
+          visible: false
         }
       }
     })
@@ -29,10 +29,17 @@ export default class Drawer extends Component {
           style={styles.obrazek}
           source={{uri: 'http://pluto.uploadfile.pl/pobierz/1570529---ospk/5316677400_1326980696.jpg'}}
         />
-        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('App')}></TouchableOpacity>
-        <Button title="Tests" color='#1A539F' onPress={()=> this.newScreen('Tests')}></Button>
-        <Button title="Results" color='#1A539F' onPress={()=> this.newScreen('Results')}></Button>
-      
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('App')}>
+          <Text>Home Page</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Results')}>
+          <Text>Results</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
+          <Text>Tests</Text>
+        </TouchableOpacity>
+
+
       </View>
     );
   }
@@ -42,7 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: '#4f6d7a',
+    backgroundColor: '#60A510',
   },
   welcome: {
     fontSize: 20,
@@ -66,6 +73,13 @@ const styles = StyleSheet.create({
     marginLeft: 100
   },
   button: {
-    color: 'red'
-  }
+    marginLeft: 50,
+    height: 43, 
+    width: 200,
+    marginTop: 10,
+    alignItems: 'center',
+    backgroundColor: 'silver',
+    padding: 10,
+    borderWidth: 2
+  },
 });

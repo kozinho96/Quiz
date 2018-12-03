@@ -79,6 +79,7 @@ fetchData() {
 const styles = StyleSheet.create({
   container: {
     flex: 1, paddingTop: 30, 
+    
   },
   welcome: {
     fontSize: 20,
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1/2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#60A510',
     height: 50,
   },
     Text: {
