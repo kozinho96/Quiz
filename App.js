@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity, StatusBar, ScrollView} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import SplashScreen from 'react-native-splash-screen';
 import { AsyncStorage } from "react-native"
@@ -28,7 +28,7 @@ displayData  = async () => {
     })
   }
 
-  goToDrawer = (screen) => {
+  goToDrawer = () => {
     Navigation.mergeOptions('drawerId', {
       sideMenu: {
         left: {
@@ -41,25 +41,64 @@ displayData  = async () => {
   render() {
     return (
 
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
       <StatusBar
         backgroundColor="#4f6d7a"
         barStyle="light-content"
       />
-      <View style={styles.toolbar}><Text style={styles.textTab}>HOME PAGE</Text></View>
-      <View style={styles.drw}>
-          <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer('Drawer')}><Image source={require('./img/menu.svg.png')} /></TouchableOpacity>
+      <View style={styles.toolbar}>
+      <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer()}><Image source={require('./img/menu.svg.png')} /></TouchableOpacity>
+      <Text style={styles.textTab}>HOME PAGE</Text>
       </View>
+    
 
+
+        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
+          <Text style={styles.title}>Zagadki matematyczne</Text>
+          <Text></Text>
+          <Text style={styles.tags}>#matematyka</Text>
+          <Text></Text>
+          <Text style={styles.description}>Bardzo szybki test sprawdzający podstawową wiedze z matematyki.</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
+          <Text style={styles.title}>Moda na sukces</Text>
+          <Text></Text>
+          <Text style={styles.tags}>#tv #tasiemiec #serial</Text>
+          <Text></Text>
+          <Text style={styles.description}>Quiz z najważniejszych wydarzeń serialu.</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
+          <Text style={styles.title}>Tranzystor bipolarny i polowy</Text>
+          <Text></Text>
+          <Text style={styles.tags}>#elektronika #fizyka</Text>
+          <Text></Text>
+          <Text style={styles.description}>Test sprawdzający podstawową wiedzę z zakresu elektroniki, związany z transytorami bipolarnymi i polowymi.</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
+          <Text style={styles.title}>Wodzowie i dowódcy starożytnego Rzymu</Text>
+          <Text></Text>
+          <Text style={styles.tags}>#historia #starożytnyRzym</Text>
+          <Text></Text>
+          <Text style={styles.description}>Konkretnym nazwiskom przyporządkuj odpowiednie wydarzenia.</Text>
+        </TouchableOpacity>
+
+
+        
+
+
+
+      <View><Text></Text></View>
+        <View style={styles.bottom}>
+        <Text style={styles.txtBottom}> Get to know your ranking result</Text>
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Results')}>
-          <Text>Results</Text>
+          <Text>Check!</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
-          <Text>Tests</Text>
-        </TouchableOpacity>
-
-            <Regulations pagekey={"uniquekey"} title={"Regulamin"} description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}/>
         </View>
+            <Regulations pagekey={"uniquekey"} title={"Regulamin"} description={"1. Z Aplikacji mogą korzystać pełnoletnie osoby fizyczne, będące konsumentami w rozumieniu art. 22 (1) ustawy z dnia 23 kwietnia 1964 r. Kodeks cywilny, zwane dalej Użytkownikami. \n\n2. Użytkownik może pobrać Aplikację na swoje urządzenie mobilne w dowolnej chwili. Po pobraniu Aplikacji, Użytkownik może ją zainstalować na swoim urządzeniu przenośnym. Za pobranie Aplikacji lub jej zainstalowanie nie są pobierane opłaty. \n\n3. W celu pobrania, zainstalowania oraz korzystania z Aplikacji, z zastrzeżeniem pkt. 6 poniżej, Użytkownik powinien posiadać dostęp do Internetu."}/>
+        </ScrollView>
     );
   }
 }
@@ -72,15 +111,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   toolbar: {
-    flex: 1/10,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#60A510',
+    alignItems: 'stretch',
+    flexDirection: 'row',
   },
   drw: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: '#60A510',
     height: 50
   },
   welcome: {
@@ -98,17 +136,52 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    marginLeft: 80,
+    marginLeft: 90,
     height: 43, 
-    width: 200,
+    width: 160,
     marginTop: 10,
     alignItems: 'center',
-    backgroundColor: 'silver',
+    backgroundColor: 'white',
     padding: 10,
-    borderWidth: 2
+    borderWidth: 2,
+    borderRadius: 5
   },
   textTab: {
     fontWeight: 'bold',
     textAlign: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginLeft: 80,
+    marginTop: 12,
+    fontSize: 20
+  },
+  bottom: {
+    borderWidth: 2,
+    padding: 5
+  },
+  txtBottom: {
+    fontSize: 17,
+    fontFamily: 'OpenSans-Bold',
+    textAlign: 'center'
+  },
+  buttonTest: {
+    marginLeft: 30,
+    height: 150, 
+    width: 300,
+    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 10,
+    borderWidth: 2,
+    borderRadius: 5
+  },
+  title: {
+    fontFamily: 'OpenSans-Bold',
+  },
+  tags: {
+    fontFamily: 'OpenSans-Regular',
+    color: '#5381F2'
+  },
+  description: {
+    fontFamily: 'OpenSans-Regular',
   }
 });

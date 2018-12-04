@@ -76,7 +76,7 @@ export default class Regulations extends Component {
 
   const styles = StyleSheet.create({
     ftreContainer:{
-            backgroundColor:'#4f6d7a',
+            backgroundColor:'#60A510',
             flex:1,
             marginTop:70,
             marginBottom:40,
@@ -121,12 +121,12 @@ export default class Regulations extends Component {
         ftreExitButtonContainer:{
             width:200,
             height:40,
-            backgroundColor:'#02011F',
+            backgroundColor:'white',
             borderRadius:10,
             justifyContent:'center',
         },
         ftreExitButtonText:{
-            color:'white',
+            color:'#02011F',
             fontSize:20,
             fontWeight:'bold',
             textAlign:'center'

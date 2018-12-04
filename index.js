@@ -4,6 +4,7 @@ import Results from './screens/Results';
 import Tests from './screens/Tests';
 import Drawer from './screens/Drawer';
 import Regulations from './screens/Regulations';
+import Score from './screens/Score';
 import {Dimensions} from 'react-native'
 
 
@@ -12,6 +13,7 @@ Navigation.registerComponent('Results', () => Results);
 Navigation.registerComponent('Tests', () => Tests);
 Navigation.registerComponent('Drawer', () => Drawer);
 Navigation.registerComponent('Regulations', () => Regulations);
+Navigation.registerComponent('Score', () => Score);
 
 
 const { width } = Dimensions.get('window');
@@ -22,7 +24,7 @@ Navigation.events().registerAppLaunchedListener(() => {
     },
     topBar: {
       elevation: 0,
-      visible: true,
+      visible: false,
       drawBehind: true,
       animate: false,
       buttonColor: 'white',
@@ -51,7 +53,7 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  name: 'App',
+                  name: 'App'
                 }
               },
             ]

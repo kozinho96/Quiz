@@ -35,9 +35,20 @@ export default class Drawer extends Component {
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Results')}>
           <Text>Results</Text>
         </TouchableOpacity>
+        <View style={{marginTop: 10, borderBottomColor: 'black', borderBottomWidth: 3,}}/>
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
-          <Text>Tests</Text>
+          <Text>Zagadki matematyczne</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
+          <Text>Moda na sukces</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
+          <Text>Tranzystor bipolarny i polowy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonBig} onPress={()=> this.newScreen('Tests')}>
+          <Text style={styles.txtBig}>Wodzowie i dowódcy starożytnego Rzymu</Text>
+        </TouchableOpacity>
+
 
 
       </View>
@@ -73,13 +84,28 @@ const styles = StyleSheet.create({
     marginLeft: 100
   },
   button: {
-    marginLeft: 50,
+    marginLeft: 28,
     height: 43, 
-    width: 200,
+    width: 240,
     marginTop: 10,
     alignItems: 'center',
-    backgroundColor: 'silver',
+    backgroundColor: 'white',
     padding: 10,
-    borderWidth: 2
+    borderWidth: 2,
+    borderRadius: 5
   },
+  buttonBig: {
+    marginLeft: 28,
+    height: 63, 
+    width: 240,
+    marginTop: 10,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 10,
+    borderWidth: 2,
+    borderRadius: 5
+  },
+  txtBig: {
+    textAlign: 'center'
+  }
 });
