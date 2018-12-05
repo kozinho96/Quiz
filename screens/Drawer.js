@@ -1,9 +1,31 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity,ActivityIndicator, ListView} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+
 
 
 export default class Drawer extends Component {
+  constructor() {
+    super();
+    this.state = {
+        isLoading: true,
+        clonedResults: [],
+        refreshing: false,
+    };
+}
+componentDidMount() {
+  fetch("https://pwsz-quiz-api.herokuapp.com/api/tests")
+      .then((response) => response.json())
+      .then((responseJson) => {
+          var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+          this.setState({
+              isLoading: false,
+              clonedResults: standardDataSource.cloneWithRows(responseJson)
+          })
+      })
+}
+
 
 
   newScreen = (screen) => {
@@ -22,6 +44,13 @@ export default class Drawer extends Component {
   }
 
   render() {
+    if(this.state.isLoading){
+      return(
+          <View>
+              <ActivityIndicator />
+          </View>
+      )
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.quiz}>Quiz App</Text>
@@ -30,25 +59,22 @@ export default class Drawer extends Component {
           source={{uri: 'http://pluto.uploadfile.pl/pobierz/1570529---ospk/5316677400_1326980696.jpg'}}
         />
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('App')}>
-          <Text>Home Page</Text>
+          <Text style={styles.hpTxt}>Home Page</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Results')}>
-          <Text>Results</Text>
+          <Text style={styles.hpTxt}>Results</Text>
         </TouchableOpacity>
         <View style={{marginTop: 10, borderBottomColor: 'black', borderBottomWidth: 3,}}/>
+        
+        <ListView
+        dataSource = {this.state.clonedResults}
+        renderRow = {
+        (rowData) => 
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
-          <Text>Zagadki matematyczne</Text>
+          <Text style={styles.txtBig}>{rowData.name}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
-          <Text>Moda na sukces</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
-          <Text>Tranzystor bipolarny i polowy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonBig} onPress={()=> this.newScreen('Tests')}>
-          <Text style={styles.txtBig}>Wodzowie i dowódcy starożytnego Rzymu</Text>
-        </TouchableOpacity>
-
+        }>
+        </ListView>
 
 
       </View>
@@ -85,12 +111,12 @@ const styles = StyleSheet.create({
   },
   button: {
     marginLeft: 28,
-    height: 43, 
+    height: 53, 
     width: 240,
     marginTop: 10,
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
+    padding: 5,
     borderWidth: 2,
     borderRadius: 5
   },
@@ -106,6 +132,10 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   txtBig: {
-    textAlign: 'center'
+    textAlign: 'center',
+    alignItems: 'center'
+  },
+  hpTxt: {
+    marginTop: 10
   }
 });

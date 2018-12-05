@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button, Image, TouchableOpacity, StatusBar, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity, StatusBar, ScrollView, ListView, ActivityIndicator} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import SplashScreen from 'react-native-splash-screen';
 import { AsyncStorage } from "react-native"
 import Regulations from './screens/Regulations';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
 
 export default class App extends Component {
-componentDidMount() {
-  SplashScreen.hide();
+  constructor() {
+    super();
+    this.state = {
+        isLoading: true,
+        clonedResults: [],
+        refreshing: false,
+    };
 }
 
 displayData  = async () => {
@@ -38,56 +44,56 @@ displayData  = async () => {
     });
   }
 
-  render() {
-    return (
+  componentDidMount() {
+    SplashScreen.hide();
+    fetch("https://pwsz-quiz-api.herokuapp.com/api/tests")
+        .then((response) => response.json())
+        .then((responseJson) => {
+            var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+            this.setState({
+                isLoading: false,
+                clonedResults: standardDataSource.cloneWithRows(responseJson)
+            })
+        })
+  }
 
-      <ScrollView style={styles.container}>
-      <StatusBar
-        backgroundColor="#4f6d7a"
-        barStyle="light-content"
-      />
-      <View style={styles.toolbar}>
+  render() {
+
+    if(this.state.isLoading){
+      return(
+          <View>
+              <ActivityIndicator />
+          </View>
+      )
+    }
+
+    return (
+  <View style={styles.container}>
+      <View style={styles.toolbar} >
       <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer()}><Image source={require('./img/menu.svg.png')} /></TouchableOpacity>
       <Text style={styles.textTab}>HOME PAGE</Text>
       </View>
     
+      <ScrollView >
+      <StatusBar
+        backgroundColor="#4f6d7a"
+        barStyle="light-content"
+      />
 
 
+  <ListView
+    dataSource = {this.state.clonedResults}
+    renderRow = {
+      (rowData) => 
         <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
-          <Text style={styles.title}>Zagadki matematyczne</Text>
-          <Text></Text>
-          <Text style={styles.tags}>#matematyka</Text>
-          <Text></Text>
-          <Text style={styles.description}>Bardzo szybki test sprawdzający podstawową wiedze z matematyki.</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
-          <Text style={styles.title}>Moda na sukces</Text>
-          <Text></Text>
-          <Text style={styles.tags}>#tv #tasiemiec #serial</Text>
-          <Text></Text>
-          <Text style={styles.description}>Quiz z najważniejszych wydarzeń serialu.</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
-          <Text style={styles.title}>Tranzystor bipolarny i polowy</Text>
-          <Text></Text>
-          <Text style={styles.tags}>#elektronika #fizyka</Text>
-          <Text></Text>
-          <Text style={styles.description}>Test sprawdzający podstawową wiedzę z zakresu elektroniki, związany z transytorami bipolarnymi i polowymi.</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
-          <Text style={styles.title}>Wodzowie i dowódcy starożytnego Rzymu</Text>
-          <Text></Text>
-          <Text style={styles.tags}>#historia #starożytnyRzym</Text>
-          <Text></Text>
-          <Text style={styles.description}>Konkretnym nazwiskom przyporządkuj odpowiednie wydarzenia.</Text>
-        </TouchableOpacity>
-
-
-        
-
+        <Text style={styles.title}>{rowData.name}</Text>
+        <Text></Text>
+        <Text style={styles.tags}>#{rowData.tags}</Text>
+        <Text></Text>
+        <Text style={styles.description}>{rowData.description}</Text>
+      </TouchableOpacity>
+    }>
+  </ListView>
 
 
       <View><Text></Text></View>
@@ -99,6 +105,7 @@ displayData  = async () => {
         </View>
             <Regulations pagekey={"uniquekey"} title={"Regulamin"} description={"1. Z Aplikacji mogą korzystać pełnoletnie osoby fizyczne, będące konsumentami w rozumieniu art. 22 (1) ustawy z dnia 23 kwietnia 1964 r. Kodeks cywilny, zwane dalej Użytkownikami. \n\n2. Użytkownik może pobrać Aplikację na swoje urządzenie mobilne w dowolnej chwili. Po pobraniu Aplikacji, Użytkownik może ją zainstalować na swoim urządzeniu przenośnym. Za pobranie Aplikacji lub jej zainstalowanie nie są pobierane opłaty. \n\n3. W celu pobrania, zainstalowania oraz korzystania z Aplikacji, z zastrzeżeniem pkt. 6 poniżej, Użytkownik powinien posiadać dostęp do Internetu."}/>
         </ScrollView>
+        </View>
     );
   }
 }
@@ -166,7 +173,7 @@ const styles = StyleSheet.create({
   },
   buttonTest: {
     marginLeft: 30,
-    height: 150, 
+    height: 170, 
     width: 300,
     marginTop: 10,
     backgroundColor: 'white',

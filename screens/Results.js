@@ -97,11 +97,11 @@ if(this.state.isLoading){
       <Text style={styles.textTab}>RESULTS</Text>
       </View>
         <Table style={styles.table} >
-            <Row data={['Nick', 'Score', 'Total', 'Type', 'Date']} style={styles.head} flexArr={[1, 0.8, 0.8, 1.5,1.5]} textStyle={styles.textTabb}/>
+            <Row data={['Nick', 'Score', 'Total', 'Type', 'Date']} style={styles.head} flexArr={[1, 0.8, 0.8, 1.2,1.5]} textStyle={styles.textTabb}/>
               <ListView
                   dataSource = {this.state.clonedResults}
                   renderRow = {
-                  (rowData) => <Row data={[rowData.nick, rowData.score, rowData.total, rowData.type,rowData.date]}  textStyle={styles.text} flexArr={[1, 0.8, 0.8, 1.5,1.5]}/>
+                  (rowData) => <Row data={[rowData.nick, rowData.score, rowData.total, rowData.type,rowData.date]}  textStyle={styles.text} flexArr={[1, 0.8, 0.8, 1.2,1.5]}/>
               }>
           </ListView>
         </Table>

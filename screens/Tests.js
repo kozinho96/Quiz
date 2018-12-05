@@ -98,6 +98,7 @@ return (
       <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer()}><Image source={require('../img/menu.svg.png')} /></TouchableOpacity>
       <Text style={styles.textTab}>TESTS</Text>
       </View>
+      
       <View>
           <Text style={styles.test3}>Pytanie {this.currentQuestion + 1} z {test1.length}</Text>
           <Text style={{color:'black'}} style={styles.test2}>{test1[this.currentQuestion].question}</Text>
