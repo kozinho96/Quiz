@@ -28,6 +28,7 @@ _onRefresh = () => {
 
 next = () => {
     if(this.testLength === this.currentQuestion){
+        this.sendResult();
         Navigation.push('MAIN_STACK',{
             component: {
                 name: 'Score'
@@ -50,6 +51,22 @@ goToDrawer = () => {
     });
   }
 
+  sendResult = () => {
+      fetch('https://pwsz-quiz-api.herokuapp.com/api/results', {
+          method: 'POST',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              nick: "Krzychu",
+              score: 7,
+              total: 10,
+              type: "chemia",
+              date: "2018-12-06"
+          })
+      });
+  }
 
 
 

@@ -5,7 +5,8 @@ import SplashScreen from 'react-native-splash-screen';
 import { AsyncStorage } from "react-native"
 import Regulations from './screens/Regulations';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
-
+import { _ } from 'lodash';
+import SQLite from 'react-native-sqlite-storage';
 
 export default class App extends Component {
   constructor() {
@@ -16,6 +17,8 @@ export default class App extends Component {
         refreshing: false,
     };
 }
+
+
 
 displayData  = async () => {
   try {
@@ -57,7 +60,12 @@ displayData  = async () => {
         })
   }
 
+
+  
+
+
   render() {
+
 
     if(this.state.isLoading){
       return(
@@ -88,7 +96,7 @@ displayData  = async () => {
         <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
         <Text style={styles.title}>{rowData.name}</Text>
         <Text></Text>
-        <Text style={styles.tags}>#{rowData.tags}</Text>
+        <Text style={styles.tags}>{_.map(rowData.tags, x => ('#' + x + ' '))}</Text>
         <Text></Text>
         <Text style={styles.description}>{rowData.description}</Text>
       </TouchableOpacity>
@@ -102,6 +110,10 @@ displayData  = async () => {
         <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Results')}>
           <Text>Check!</Text>
         </TouchableOpacity>
+        </View>
+
+        <View>
+          
         </View>
             <Regulations pagekey={"uniquekey"} title={"Regulamin"} description={"1. Z Aplikacji mogą korzystać pełnoletnie osoby fizyczne, będące konsumentami w rozumieniu art. 22 (1) ustawy z dnia 23 kwietnia 1964 r. Kodeks cywilny, zwane dalej Użytkownikami. \n\n2. Użytkownik może pobrać Aplikację na swoje urządzenie mobilne w dowolnej chwili. Po pobraniu Aplikacji, Użytkownik może ją zainstalować na swoim urządzeniu przenośnym. Za pobranie Aplikacji lub jej zainstalowanie nie są pobierane opłaty. \n\n3. W celu pobrania, zainstalowania oraz korzystania z Aplikacji, z zastrzeżeniem pkt. 6 poniżej, Użytkownik powinien posiadać dostęp do Internetu."}/>
         </ScrollView>

@@ -26,16 +26,22 @@ goToDrawer = () => {
 
 _onRefresh = () => {
   this.setState({refreshing: true});
-  // this.fetchData().then(() => {
-  // });
-  setTimeout(()=> {
-      this.setState({refreshing: false});
+  return this.fetchData().then(() => {
+    this.setState({refreshing: false});
+  })
 
-  }, 2000)
 };
 
 fetchData() {
-
+  return fetch("https://pwsz-quiz-api.herokuapp.com/api/results")
+      .then((response) => response.json())
+      .then((responseJson) => {
+          var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+          this.setState({
+              isLoading: false,
+              clonedResults: standardDataSource.cloneWithRows(responseJson)
+          })
+      })
 }
 
 componentDidMount() {
@@ -51,32 +57,7 @@ componentDidMount() {
 }
 
   render() {
-    /*var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
-    var results = [
-      {
-          nick: 'Marek',
-          score: 18,
-          total: 20,
-          type: 'historia',
-          date: '2018-11-22'
-      },
-      {
-          nick: 'Krzysiek',
-          score: 20,
-          total: 20,
-          type: 'siatkówka',
-          date: '2018-12-02'
-      },
-      {
-          nick: 'Rafał',
-          score: 15,
-          total: 30,
-          type: 'fizyka',
-          date: '2018-12-09'
-    },
-  ];
-  var clonedResults = standardDataSource.cloneWithRows(results);
-*/
+
 if(this.state.isLoading){
   return(
       <View>
@@ -86,16 +67,18 @@ if(this.state.isLoading){
 }
 
   return (
-    <ScrollView style={styles.container}
+    <View style={styles.container}>
+    <View style={styles.toolbar}>
+    <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer()}><Image source={require('../img/menu.svg.png')} /></TouchableOpacity>
+    <Text style={styles.textTab}>RESULTS</Text>
+    </View>
+    <ScrollView 
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.refreshing}
                         onRefresh={this._onRefresh}/>
                 }>
-      <View style={styles.toolbar}>
-      <TouchableOpacity style={styles.drw} onPress={()=> this.goToDrawer()}><Image source={require('../img/menu.svg.png')} /></TouchableOpacity>
-      <Text style={styles.textTab}>RESULTS</Text>
-      </View>
+
         <Table style={styles.table} >
             <Row data={['Nick', 'Score', 'Total', 'Type', 'Date']} style={styles.head} flexArr={[1, 0.8, 0.8, 1.2,1.5]} textStyle={styles.textTabb}/>
               <ListView
@@ -106,6 +89,7 @@ if(this.state.isLoading){
           </ListView>
         </Table>
     </ScrollView>
+    </View>
   );
 }
 }
