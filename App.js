@@ -8,6 +8,8 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 import { _ } from 'lodash';
 import SQLite from 'react-native-sqlite-storage';
 
+var db = SQLite.openDatabase({name: 'database.db', createFromLocation: '~www/database.db'});
+
 export default class App extends Component {
   constructor() {
     super();
@@ -15,21 +17,119 @@ export default class App extends Component {
         isLoading: true,
         clonedResults: [],
         refreshing: false,
+        tests: []
     };
 }
 
-
-
-displayData  = async () => {
+async componentDidMount() {
+  this._selectDataFromTable()
+  SplashScreen.hide();
   try {
-   this.newScreen('Regulations')
+      const value = await AsyncStorage.getItem('databaseDownloadDate');
+      if (value == null) {
+          this.insertData();
+      } else {
+          let now = new Date();
+          let then = new Date(JSON.parse(value).value);
+          const utc1 = Date.UTC(then.getFullYear(), then.getMonth(), then.getDate());
+          const utc2 = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+          if (Math.floor((utc2 - utc1) / 86400000) >= 1) {
+              this.insertData();
+          } else {
+              this.downloadDataFromDatabase(db);
+          }
+      }
+  } catch (error) {
   }
-  catch (error) {
-    alert(error);
-  }
+
+  this._selectDataFromTable()
+
 }
 
-  newScreen = (screen) => {
+_selectDataFromTable(){
+  db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM main.descriptionTest',[], (tx, results) => {
+          var len = results.rows.length;
+          console.log("dlugosc: ", len)
+          console.log(results.rows.item(0))
+          console.log(results.rows.item(1))
+          console.log(results.rows.item(2))
+          console.log(results.rows.item(3))
+          console.log(results.rows.item(4))
+
+
+      });
+  });
+}
+
+insertData = () => {
+  db.transaction((tx) => {
+      fetch("https://pwsz-quiz-api.herokuapp.com/api/tests")
+          .then((response) => response.json())
+          .then((responseJson) => {
+              this.setState({tests: responseJson});
+              this.addTestsToDatabase(db, responseJson);
+              this.downloadTestData();
+          });
+  })
+};
+
+addTestsToDatabase = (db, data) => {
+  db.transaction((tx) => {
+      tx.executeSql('DELETE FROM descriptionTest; DELETE FROM test; VACUUM;', [], (tx, results) => {
+      });
+      for (let i = 0; i < data.length; i++) {
+          tx.executeSql(
+              'INSERT INTO descriptionTest (id, name, description, tags, level, numberOfTasks) VALUES (?, ?, ?, ?, ?, ?);',
+              [data[i].id, data[i].name, data[i].description, JSON.stringify(data[i].tags), data[i].level, data[i].numberOfTasks]
+          );
+      }
+  });
+};
+
+downloadTestData = () => {
+  for (let i = 0; i < this.state.tests.length; i++) {
+      fetch('https://pwsz-quiz-api.herokuapp.com/api/test/' + this.state.tests[i].id)
+          .then((data) => data.json())
+          .then((d) => {
+              db.transaction((tx) => {
+                  tx.executeSql(
+                      'INSERT INTO descriptionTest (id, name, description, level, tasks, tags) VALUES (?, ?, ?, ?, ?, ?);',
+                      [d.id, d.name, d.description, JSON.stringify(d.level), JSON.stringify(d.tasks), JSON.stringify(d.tags)]
+                  );
+              });
+              AsyncStorage.setItem('databaseDownloadDate', JSON.stringify({"value": Date()}));
+          })
+          .catch((error) => {
+              this.setState({internetConnection: false});
+              alert('Błąd podczas pobierania danych szczegółowych testów.\nSprawdź połączenie z internetem!');
+          });
+  }
+};
+
+downloadDataFromDatabase = (db) => {
+  db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM main.descriptionTest;', [], (tx, results) => {
+          var tests = [];
+          for(let i = 0; i < results.rows.length; i++) {
+              tests[i] = results.rows.item(i);
+          }
+          this.setState({ tests: tests });
+      });
+  });
+};
+
+
+// displayData  = async () => {
+//   try {
+//    this.newScreen('Regulations')
+//   }
+//   catch (error) {
+//     alert(error);
+//   }
+// }
+
+newScreen = (screen) => {
     Navigation.push(this.props.componentId, {
       component: {
         name: screen
@@ -47,18 +147,7 @@ displayData  = async () => {
     });
   }
 
-  componentDidMount() {
-    SplashScreen.hide();
-    fetch("https://pwsz-quiz-api.herokuapp.com/api/tests")
-        .then((response) => response.json())
-        .then((responseJson) => {
-            var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
-            this.setState({
-                isLoading: false,
-                clonedResults: standardDataSource.cloneWithRows(responseJson)
-            })
-        })
-  }
+  
 
 
   
@@ -67,13 +156,35 @@ displayData  = async () => {
   render() {
 
 
-    if(this.state.isLoading){
-      return(
-          <View>
-              <ActivityIndicator />
-          </View>
-      )
-    }
+    // if(this.state.isLoading){
+    //   return(
+    //       <View>
+    //           <ActivityIndicator />
+    //       </View>
+    //   )
+    // }
+
+    let rows = [];
+        for (let i = 0; i < this.state.tests.length; i++) {
+            rows.push(
+                <View key={i} style={styles.view}>
+                    <TouchableOpacity style={styles.buttonTest} key={i}
+                                      onPress={() => this.newScreen('Tests', this.state.tests[i].id)}>
+                        <Text style={styles.title}>{this.state.tests[i].name}</Text>
+                        <Text></Text>
+                        <Text style={styles.tags}>
+                        #{this.state.tests[i].tags}
+                        </Text>
+                        <Text></Text>
+                        <Text style={styles.description}>
+                            {this.state.tests[i].description}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+
+
 
     return (
   <View style={styles.container}>
@@ -89,19 +200,8 @@ displayData  = async () => {
       />
 
 
-  <ListView
-    dataSource = {this.state.clonedResults}
-    renderRow = {
-      (rowData) => 
-        <TouchableOpacity style={styles.buttonTest} onPress={()=> this.newScreen('Tests')}>
-        <Text style={styles.title}>{rowData.name}</Text>
-        <Text></Text>
-        <Text style={styles.tags}>{_.map(rowData.tags, x => ('#' + x + ' '))}</Text>
-        <Text></Text>
-        <Text style={styles.description}>{rowData.description}</Text>
-      </TouchableOpacity>
-    }>
-  </ListView>
+ <ScrollView style={styles.appScreen}>
+                    {rows}
 
 
       <View><Text></Text></View>
@@ -111,7 +211,7 @@ displayData  = async () => {
           <Text>Check!</Text>
         </TouchableOpacity>
         </View>
-
+        </ScrollView>
         <View>
           
         </View>

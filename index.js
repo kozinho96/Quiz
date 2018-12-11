@@ -7,9 +7,6 @@ import Regulations from './screens/Regulations';
 import Score from './screens/Score';
 import {Dimensions} from 'react-native'
 
-var React = require('react-native');
-var SQLite = require('react-native-sqlite-storage')
-
 
 Navigation.registerComponent('App', () => App);
 Navigation.registerComponent('Results', () => Results);

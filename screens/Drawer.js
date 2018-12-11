@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button, Image, TouchableOpacity,ActivityIndicator, ListView} from 'react-native';
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity,ActivityIndicator, ListView, ScrollView} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import SQLite from 'react-native-sqlite-storage';
+
+var db = SQLite.openDatabase({name: 'database.db', createFromLocation: '~www/database.db'});
 
 
 
@@ -12,19 +15,24 @@ export default class Drawer extends Component {
         isLoading: true,
         clonedResults: [],
         refreshing: false,
+        tests: []
     };
 }
 componentDidMount() {
-  fetch("https://pwsz-quiz-api.herokuapp.com/api/tests")
-      .then((response) => response.json())
-      .then((responseJson) => {
-          var standardDataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
-          this.setState({
-              isLoading: false,
-              clonedResults: standardDataSource.cloneWithRows(responseJson)
-          })
-      })
+this.downloadDataFromDatabase(db);
 }
+
+downloadDataFromDatabase = (db) => {
+  db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM main.descriptionTest;', [], (tx, results) => {
+          var tests = [];
+          for(let i = 0; i < results.rows.length; i++) {
+              tests[i] = results.rows.item(i);
+          }
+          this.setState({ tests: tests });
+      });
+  });
+};
 
 
 
@@ -44,13 +52,19 @@ componentDidMount() {
   }
 
   render() {
-    if(this.state.isLoading){
-      return(
-          <View>
-              <ActivityIndicator />
-          </View>
-      )
+
+    let rows = [];
+    for (let i = 0; i < this.state.tests.length; i++) {
+        rows.push(
+            <View key={i} style={styles.view}>
+        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
+          <Text style={styles.txtBig}>{this.state.tests[i].name}</Text>
+        </TouchableOpacity>
+            </View>
+        )
     }
+
+
     return (
       <View style={styles.container}>
         <Text style={styles.quiz}>Quiz App</Text>
@@ -66,16 +80,10 @@ componentDidMount() {
         </TouchableOpacity>
         <View style={{marginTop: 10, borderBottomColor: 'black', borderBottomWidth: 3,}}/>
         
-        <ListView
-        dataSource = {this.state.clonedResults}
-        renderRow = {
-        (rowData) => 
-        <TouchableOpacity style={styles.button} onPress={()=> this.newScreen('Tests')}>
-          <Text style={styles.txtBig}>{rowData.name}</Text>
-        </TouchableOpacity>
-        }>
-        </ListView>
+        <View>
+                    {rows}
 
+        </View>
 
       </View>
     );
